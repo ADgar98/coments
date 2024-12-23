@@ -70,59 +70,108 @@
     let btn = document.querySelector('.add-form-button');
     let list = document.querySelector('.comments');
     let cont = document.querySelector('.container');
+    
+    let counter = 0
+    
+    let options = {hour: '2-digit', minute:'2-digit'};
+    let optDate = {year: '2-digit', month: '2-digit', day: '2-digit'}
+    
+    
 
+
+    let likesArr = [
+      { name: "Глеб Фокин",
+        coment: "Это будет первый комментарий на этой странице",
+        date: "12.02.22 12:18",
+        likeNumber: 3,
+        like: false
+      },
+      { name: "Варвара Н",
+        coment: "Мне нравится как оформлена эта страница! ❤",
+        date: "13.02.22 19:22",
+        likeNumber: 75,
+        like: true
+      },
+      
+    ]
+
+    likesArr.likeNumber = counter;
+
+    const initClick = () => {
+          const btns = document.querySelectorAll(".like-button");
+
+          for (const btn of btns) {
+             
+              btn.addEventListener('click', () => {
+                  const indexLike = btn.dataset.num;
+                
+                  const commentObj = likesArr[indexLike];
+                 console.log('click');
+                 console.log(likesArr);
+                 if (commentObj.like) {
+                  commentObj.likeNumber -= 1
+                  commentObj.like = false
+                  
+                  console.log(likesArr);
+              
+                } else {
+                  commentObj.likeNumber += 1
+                  commentObj.like = true;
+                }
+
+                comentLi();                   
+              })
+              
+          }
+      
+      }
+      
+    const comentLi = () => {
+      list.innerHTML = likesArr.map((like, index) => {
+              return `<li class="comment"><div class="comment-header">
+            <div>${like.name}</div>
+            <div>${like.date}</div>
+          </div>
+          <div class="comment-body">
+            <div class="comment-text">
+              ${like.coment}
+            </div>
+          </div>
+          <div class="comment-footer">
+            <div class="likes">
+              <span class="likes-counter" >${like.likeNumber}</span>
+              <button class="like-button ${like.like ? "-active-like":""}" data-num="${index}"></button>
+            </div>
+          </div>
+        </li>`;
+          }).join("");
+          console.log('рендорю');
+          
+          initClick()
+          
+    }
+    comentLi()
+  
     btn.addEventListener('click', function (e) {
-      console.log('rerer');
+      if (input.value === '' || textInput.value === '') {
+        return alert('Строчки должны быть заполнены!');
+      }
+      console.log("работаем");
       
-      let boxLi = document.createElement("li")
-      console.log(boxLi);
-      
-      boxLi.classList = 'comment'
-      list.appendChild(boxLi);
-      let nameInputHead = document.createElement('div')
-      boxLi.appendChild(nameInputHead)
-      nameInputHead.classList = 'comment-header'
-
-      let comName = document.createElement("div")
-      // comName.setAttribute('id', 'nameUser');
-      nameInputHead.appendChild(comName)
-      comName.textContent = input.value
-
-      let comDate = document.createElement("div")
-      nameInputHead.appendChild(comDate)
-      let options = {hour: '2-digit', minute:'2-digit'};
-      let optDate = {year: '2-digit', month: '2-digit', day: '2-digit'}
-      comDate.innerHTML =  new Date().toLocaleDateString('ru-RU', optDate) + " " + new Date().toLocaleTimeString('ru-RU', options)
-
-      let comBox = document.createElement("div")
-      comBox.classList = 'comment-body'
-      boxLi.appendChild(comBox)
-
-      let userCom = document.createElement("div")
-      userCom.classList = 'comment-text'
-      userCom.textContent = textInput.value
-      comBox.appendChild(userCom);
-
-      let boxFooter = document.createElement("div");
-      boxFooter.classList = 'comment-footer'
-      boxLi.appendChild(boxFooter)
-
-      let likeBox = document.createElement("div")
-      likeBox.classList = 'likes'
-      boxFooter.appendChild(likeBox)
-
-      let likeBtn = document.createElement("button")
-      likeBtn.classList = 'like-button'
-      likeBox.appendChild(likeBtn)
-
+      let newLikeArr = { name: input.value,
+        coment: textInput.value,
+        date: new Date().toLocaleDateString('ru-RU', optDate) + " " + new Date().toLocaleTimeString('ru-RU', options),
+        likeNumber: counter,
+        like: false
+      }
+      likesArr.push(newLikeArr)
       textInput.value = ""
       input.value = "" 
+      comentLi();
+      
     })
-    
 
-    
-
-    // Код писать здесь
     console.log("It works!");
   </script>
+   
 </html>
