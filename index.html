@@ -97,6 +97,23 @@
 
     likesArr.likeNumber = counter;
 
+    const initLiClick = () => {
+        const liBoxes = document.querySelectorAll(".comment");
+
+        for (const liBox of liBoxes) {
+          textInput.value = ""
+          liBox.addEventListener('click', () => {
+                   
+          const indexLi = liBox.dataset.li;
+          const userName = likesArr[indexLi];
+                    
+          textInput.value = `"${userName.coment} ${userName.name}"`
+                    
+          })
+          
+        }
+      }
+
     const initClick = () => {
           const btns = document.querySelectorAll(".like-button");
 
@@ -104,18 +121,15 @@
              
               btn.addEventListener('click', () => {
                   const indexLike = btn.dataset.num;
-                
+                  event.stopPropagation();
                   const commentObj = likesArr[indexLike];
-                 console.log('click');
-                 console.log(likesArr);
+                 
                  if (commentObj.like) {
-                  commentObj.likeNumber -= 1
-                  commentObj.like = false
-                  
-                  console.log(likesArr);
-              
+                  commentObj.likeNumber -= 1;
+                  commentObj.like = false;
+                              
                 } else {
-                  commentObj.likeNumber += 1
+                  commentObj.likeNumber += 1;
                   commentObj.like = true;
                 }
 
@@ -126,50 +140,48 @@
       
       }
       
-    const comentLi = () => {
-      list.innerHTML = likesArr.map((like, index) => {
-              return `<li class="comment"><div class="comment-header">
-            <div>${like.name}</div>
-            <div>${like.date}</div>
-          </div>
-          <div class="comment-body">
-            <div class="comment-text">
-              ${like.coment}
+      const comentLi = () => {
+        list.innerHTML = likesArr.map((like, index) => {
+                return `<li class="comment" data-Li="${index}"><div class="comment-header">
+              <div>${like.name}</div>
+              <div>${like.date}</div>
             </div>
-          </div>
-          <div class="comment-footer">
-            <div class="likes">
-              <span class="likes-counter" >${like.likeNumber}</span>
-              <button class="like-button ${like.like ? "-active-like":""}" data-num="${index}"></button>
+            <div class="comment-body">
+              <div class="comment-text">
+                ${like.coment}
+              </div>
             </div>
-          </div>
-        </li>`;
-          }).join("");
-          console.log('рендорю');
-          
-          initClick()
-          
-    }
+            <div class="comment-footer">
+              <div class="likes">
+                <span class="likes-counter" >${like.likeNumber}</span>
+                <button class="like-button ${like.like ? "-active-like":""}" data-num="${index}"></button>
+              </div>
+            </div>
+          </li>`;
+            }).join("");
+            console.log('рендорю');
+            
+            initClick();
+            initLiClick();
+      }
     comentLi()
   
     btn.addEventListener('click', function (e) {
-      if (input.value === '' || textInput.value === '') {
-        return alert('Строчки должны быть заполнены!');
-      }
-      console.log("работаем");
-      
-      let newLikeArr = { name: input.value,
-        coment: textInput.value,
-        date: new Date().toLocaleDateString('ru-RU', optDate) + " " + new Date().toLocaleTimeString('ru-RU', options),
-        likeNumber: counter,
-        like: false
-      }
-      likesArr.push(newLikeArr)
-      textInput.value = ""
-      input.value = "" 
-      comentLi();
-      
-    })
+        
+        console.log("работаем");
+        
+        let newLikeArr = { name: input.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;;"),
+          coment: textInput.value.replaceAll("<", "&lt;").replaceAll(">", "&gt;"),
+          date: new Date().toLocaleDateString('ru-RU', optDate) + " " + new Date().toLocaleTimeString('ru-RU', options),
+          likeNumber: counter,
+          like: false
+        }
+        likesArr.push(newLikeArr)
+        textInput.value = ""
+        input.value = "" 
+        comentLi();
+        
+      })
 
     console.log("It works!");
   </script>
