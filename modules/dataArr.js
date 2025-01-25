@@ -1,16 +1,19 @@
 export let likesArr = [
-    {
-        name: "Глеб Фокин",
-        coment: "Это будет первый комментарий на этой странице",
-        date: "12.02.22 12:18",
-        likeNumber: 3,
-        like: false,
-    },
-    {
-        name: "Варвара Н",
-        coment: "Мне нравится как оформлена эта страница! ❤",
-        date: "13.02.22 19:22",
-        likeNumber: 75,
-        like: true,
-    },
+    // {
+    //     date: "12.02.22 12:18",
+    //     likes: 3,
+    //     isLiked: false,
+    //     text: "Это будет первый комментарий на этой странице",
+    //     author: { name: "Глеб Фокин" },
+    // },
+    // {
+    //     date: "13.02.22 19:22",
+    //     likes: 75,
+    //     isLiked: true,
+    //     text: "Мне нравится как оформлена эта страница! ❤",
+    //     author: { name: "Варвара Н" },
+    // },
 ]
+export const updateLikesArr = (newLikesArr) => {
+    likesArr = newLikesArr
+}

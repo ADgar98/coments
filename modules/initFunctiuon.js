@@ -1,5 +1,5 @@
 import { likesArr } from "./dataArr.js"
-import { comentLi } from "./render.js"
+import { renderComments } from "./render.js"
 
 export const initLiClick = () => {
     let textInput = document.querySelector(".add-form-text")
@@ -11,7 +11,7 @@ export const initLiClick = () => {
             const indexLi = liBox.dataset.li
             const userName = likesArr[indexLi]
 
-            textInput.value = `"${userName.coment} ${userName.name}"`
+            textInput.value = `"${userName.text} ${userName.author.name}"`
         })
     }
 }
@@ -26,14 +26,14 @@ export const initClick = () => {
             const commentObj = likesArr[indexLike]
 
             if (commentObj.like) {
-                commentObj.likeNumber -= 1
-                commentObj.like = false
+                commentObj.likes -= 1
+                commentObj.isLiked = false
             } else {
-                commentObj.likeNumber += 1
-                commentObj.like = true
+                commentObj.likes += 1
+                commentObj.isLiked = true
             }
 
-            comentLi()
+            renderComments()
         })
     }
 }
