@@ -1,16 +1,23 @@
 import { likesArr } from "./dataArr.js"
 import { renderComments } from "./render.js"
 
+function delay(interval = 300) {
+    return new Promise((resolve) => {
+        setTimeout(() => {
+            resolve()
+        }, interval)
+    })
+}
+
 export const initLiClick = () => {
     let textInput = document.querySelector(".add-form-text")
     const liBoxes = document.querySelectorAll(".comment")
 
     for (const liBox of liBoxes) {
-        textInput.value = ""
+        // textInput.value = ""
         liBox.addEventListener("click", () => {
             const indexLi = liBox.dataset.li
             const userName = likesArr[indexLi]
-
             textInput.value = `"${userName.text} ${userName.author.name}"`
         })
     }
@@ -24,16 +31,19 @@ export const initClick = () => {
             const indexLike = btn.dataset.num
             event.stopPropagation()
             const commentObj = likesArr[indexLike]
+            btn.classList.add("-loading-like")
 
-            if (commentObj.like) {
-                commentObj.likes -= 1
-                commentObj.isLiked = false
-            } else {
-                commentObj.likes += 1
-                commentObj.isLiked = true
-            }
+            delay(2000).then(() => {
+                if (commentObj.likes) {
+                    commentObj.likes -= 1
+                    commentObj.isLiked = false
+                } else {
+                    commentObj.likes += 1
+                    commentObj.isLiked = true
+                }
 
-            renderComments()
+                renderComments()
+            })
         })
     }
 }
