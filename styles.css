@@ -165,3 +165,6 @@ body {
     animation: rotating 2s linear infinite;
     
 }
+.error{
+    background-color: red;
+}
