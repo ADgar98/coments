@@ -1,9 +1,13 @@
 import { likesArr } from "./dataArr.js"
 import { initLiClick } from "./initFunctiuon.js"
 import { initClick } from "./initFunctiuon.js"
+import { renderAuth } from "./renderAuth.js"
+import { addBtn, name, token } from "../index.js"
+import { renderReg } from "./renderReg.js"
+
 export const renderComments = () => {
-    let list = document.querySelector(".comments")
-    list.innerHTML = likesArr
+    let container = document.querySelector(".container")
+    const commentsHtml = likesArr
         .map((like, index) => {
             let renderDate = new Date(like.date)
 
@@ -36,6 +40,47 @@ export const renderComments = () => {
         })
         .join("")
 
-    initClick()
-    initLiClick()
+    const addCommentsHtml = `
+            <div class="loaderBox"></div>
+            <div class="add-form">
+                <input
+                    type="text"
+                    class="add-form-name"
+                    placeholder="Введите ваше имя"
+                    readonly
+                    value="${name}"
+                />
+                <textarea
+                    type="textarea"
+                    class="add-form-text"
+                    placeholder="Введите ваш коментарий"
+                    rows="4"
+                ></textarea>
+                <div class="add-form-row">
+                    <button class="add-form-button">Написать</button>
+                </div>
+            </div>`
+
+    const linkAut = `<p> Авторизуйтесь чтобы оставить комментарий </p>`
+
+    const baseHtml = `<ul class="comments">${commentsHtml}</ul>
+    ${token ? addCommentsHtml : linkAut}`
+
+    container.innerHTML = baseHtml
+
+    if (token) {
+        addBtn()
+    }
+
+    document.querySelector(".buttonAuth").addEventListener("click", () => {
+        renderAuth()
+    })
+    document.querySelector(".buttonReg").addEventListener("click", () => {
+        renderReg()
+    })
+
+    if (token) {
+        initClick()
+        initLiClick()
+    }
 }
