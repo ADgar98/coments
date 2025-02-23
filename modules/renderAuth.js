@@ -20,14 +20,46 @@ export const renderAuth = () => {
     const addAuth = document.getElementById("submit")
 
     addAuth.addEventListener("click", () => {
+        if (loginEl.value === "" || passwordEl.value === "") {
+            loginEl.classList.add("error")
+            passwordEl.classList.add("error")
+
+            setTimeout(() => {
+                loginEl.classList.remove("error")
+                passwordEl.classList.remove("error")
+            }, 2000)
+            alert("Заполните поля ввода")
+            return false
+        }
+        if (loginEl.value === " " || passwordEl.value === " ") {
+            loginEl.classList.add("error")
+            passwordEl.classList.add("error")
+
+            setTimeout(() => {
+                loginEl.classList.remove("error")
+                passwordEl.classList.remove("error")
+            }, 2000)
+            alert("Заполните поля ввода")
+            return false
+        }
         login(loginEl.value, passwordEl.value)
             .then((response) => {
+                if (response.status === 400) {
+                    throw new Error("Введены неправильные логин или пароль")
+                }
+                if (response.status === 500) {
+                    throw new Error("Проблемы с сервером")
+                }
+
                 return response.json()
             })
             .then((data) => {
                 setToken(data.user.token)
                 setName(data.user.name)
                 fetchRenderComment()
+            })
+            .catch((error) => {
+                alert(error.message)
             })
     })
 }

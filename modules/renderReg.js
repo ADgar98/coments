@@ -21,14 +21,61 @@ export const renderReg = () => {
     const nameEl = document.querySelector(".add-name")
 
     addReg.addEventListener("click", () => {
+        if (
+            loginEl.value === "" ||
+            passwordEl.value === "" ||
+            nameEl.value === ""
+        ) {
+            loginEl.classList.add("error")
+            passwordEl.classList.add("error")
+            nameEl.classList.add("error")
+
+            setTimeout(() => {
+                loginEl.classList.remove("error")
+                passwordEl.classList.remove("error")
+                nameEl.classList.remove("error")
+            }, 2000)
+            alert("Заполните поля ввода")
+            return false
+        }
+        if (
+            loginEl.value === " " ||
+            passwordEl.value === " " ||
+            nameEl.value === " "
+        ) {
+            loginEl.classList.add("error")
+            passwordEl.classList.add("error")
+            nameEl.classList.add("error")
+
+            setTimeout(() => {
+                loginEl.classList.remove("error")
+                passwordEl.classList.remove("error")
+                nameEl.classList.remove("error")
+            }, 2000)
+            alert("Заполните поля ввода")
+            return false
+        }
+
         regestration(loginEl.value, passwordEl.value, nameEl.value)
             .then((response) => {
+                if (response.status === 400) {
+                    throw new Error(
+                        "Пользователь с таким логином уже сущевствует!",
+                    )
+                }
+                if (response.status === 500) {
+                    throw new Error("Проблемы с сервером")
+                }
+
                 return response.json()
             })
             .then((data) => {
                 setToken(data.user.token)
                 setName(data.user.name)
                 fetchRenderComment()
+            })
+            .catch((error) => {
+                alert(error.message)
             })
     })
 }

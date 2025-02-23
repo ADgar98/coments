@@ -67,11 +67,6 @@ export const renderComments = () => {
     ${token ? addCommentsHtml : linkAut}`
 
     container.innerHTML = baseHtml
-
-    if (token) {
-        addBtn()
-    }
-
     document.querySelector(".buttonAuth").addEventListener("click", () => {
         renderAuth()
     })
@@ -80,7 +75,9 @@ export const renderComments = () => {
     })
 
     if (token) {
+        addBtn()
         initClick()
         initLiClick()
+        document.querySelector(".header").style.display = "none"
     }
 }
